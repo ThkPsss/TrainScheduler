@@ -1,0 +1,17 @@
+#current-emp {
+    margin: 15px;
+    width: 100%;
+}
+​
+#emp-row{
+    margin-top: 20px;
+}
+​
+#emp-form{
+    margin: 15px;
+}
+​
+.jumbotron {
+    background-color: black;
+    color: white;
+}
