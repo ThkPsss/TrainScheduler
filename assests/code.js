@@ -1,67 +1,70 @@
-let name = $("#name")
-let destination = $("#destination")
-let submit = $("#submit")
-let startTime = $("#start")
-let frequency = $("#frequency")
+let trainData = {
+  name = "",
+  destination = "",
+  startTime = $("#start"),
+  frequency = 0
+}
 
-        // Your web app's Firebase configuration
-  // Your web app's Firebase configuration
-  var firebaseConfig = {
-    apiKey: "AIzaSyAgcJRNmMnskExKtBZVvbct7yRdezqSmyQ",
-    authDomain: "trainscheduler-f3e50.firebaseapp.com",
-    databaseURL: "https://trainscheduler-f3e50.firebaseio.com",
-    projectId: "trainscheduler-f3e50",
-    storageBucket: "trainscheduler-f3e50.appspot.com",
-    messagingSenderId: "64165825466",
-    appId: "1:64165825466:web:71c521f51c90ad28932b83",
-    measurementId: "G-TZL7D8H5GK"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
+// Your web app's Firebase configuration
+// Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyAgcJRNmMnskExKtBZVvbct7yRdezqSmyQ",
+      authDomain: "trainscheduler-f3e50.firebaseapp.com",
+      databaseURL: "https://trainscheduler-f3e50.firebaseio.com",
+      projectId: "trainscheduler-f3e50",
+      storageBucket: "trainscheduler-f3e50.appspot.com",
+      messagingSenderId: "64165825466",
+      appId: "1:64165825466:web:71c521f51c90ad28932b83",
+      measurementId: "G-TZL7D8H5GK"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
 
-  let ref = database.ref();
+    let ref = database.ref();
 
-submit.on("click", function(e){
-    e.preventDefault();
-    ref.push({
-        name: name.val(),
-        destination: destination.val(),
-        start: startTime.val(),
-        frequency: frequency.val()
-    })
-    console.log(name.val(),)
+$("#submit").on("click", function(event){
+  event.preventDefault();
 
-    name.val("")
-    destination.val("")
-    startTime.val("")
-    frequency.val("")
+  // YOUR TASK!!!
+  // Code in the logic for storing and retrieving the most recent user.
+  // Don't forget to provide initial data to your Firebase database.
+  trainData.name = $("#name").val().trim();
+  trainData.destination = $("#destination").val().trim();
+  trainData.frequency = $("#frequency").val().trim();
+  trainData.startTime = $("#start").val().trim();
 
+  // Code for the push
+  dataRef.ref().push({
 
+    name: trainData.name,
+    destination: trainData.destination,
+    frequency: trainData.frequency,
+    startTime: trainData.startTime
+  })
 })
+// Firebase watcher + initial loader HINT: .on("value")
+ref.on("child_added", function(snapshot) {
+    let table = $("#newrow");
+    let row = $("<tr>")
+    let data = $("<td>")
 
-        // Firebase watcher + initial loader HINT: .on("value")
-        ref.on("child_added", function(snapshot) {
-            let table = $("#newrow");
-            let row = $("<tr>")
-            let data = $("<td>")
+    let now = moment(new Date());
+    let start = moment(snapshot.val().start);
+    //let duration = moment.duration(now.diff(start));
+    //let months = Math.floor(duration.asMonths());
 
-            let now = moment(new Date());
-            let start = moment(snapshot.val().start);
-            //let duration = moment.duration(now.diff(start));
-            //let months = Math.floor(duration.asMonths());
-
-            row.append(
-                $("<td>").text(snapshot.val().name),
-                $("<td>").text(snapshot.val().destination),
-                $("<td>").text(snapshot.val().start),
-                //$("<td>").text(months),
-                //$("<td>").text(`$${snapshot.val().rate}`),
-                //$("<td>").text(`$${months * snapshot.val().rate}`)
-                );
-            table.append(row);
-      
-            // Handle the errors
-          }, function(errorObject) {
-            console.log("Errors handled: " + errorObject.code);
-          });
+    row.append(
+        $("<td>").text(snapshot.val().name),
+        $("<td>").text(snapshot.val().destination),
+        $("<td>").text(snapshot.val().start),
+        //$("<td>").text(months),
+        //$("<td>").text(`$${snapshot.val().rate}`),
+        //$("<td>").text(`$${months * snapshot.val().rate}`)
+        );
+    table.append(row);
+        
+    // Handle the errors
+  }, function(errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+  });
 
